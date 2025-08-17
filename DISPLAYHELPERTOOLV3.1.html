@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Display Issue Helper – V3.1</title>
+  <style>
+    :root{
+      --bg:#f5f5f5; --card:#ffffff; --fg:#111; --muted:#666; --brand:#145a48; --brand-2:#4CAF50; --brand-2-hover:#45a049; --border:rgba(0,0,0,0.08);
+    }
+    *{box-sizing:border-box}
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; background: var(--bg); color:var(--fg); padding: 2rem; max-width: 880px; margin: auto; }
+    header.app{display:flex; align-items:center; gap:.6rem; margin-bottom:1rem}
+    header.app h1{margin:0; font-size:1.4rem}
+    .version{font-size:.8rem; color:var(--muted)}
+
+    .progress{height:10px; background: #e7ecee; border-radius:999px; overflow:hidden; box-shadow: inset 0 0 0 1px var(--border);}
+    .progress > span{display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--brand), var(--brand-2)); transition: width .35s ease;}
+
+    .step { display: none; }
+    .step.active { display: flex; flex-direction: column; justify-content: center; min-height: 380px; background: var(--card); padding: 1.5rem; border-radius: 14px; border:1px solid var(--border); box-shadow: 0 6px 18px rgba(0,0,0,0.08); margin: 1rem 0; }
+    .header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .icon { width: 22px; height: 22px; stroke: var(--brand); }
+    h1, h2 { margin: 0; }
+    p { font-size: 1.05rem; line-height: 1.6; }
+    ul { margin: 0.25rem 0 0.25rem 1rem; }
+
+    .btns{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.25rem}
+    button { padding: 0.65rem 1.1rem; font-size: 0.98rem; border: none; border-radius: 10px; background: var(--brand-2); color: white; cursor: pointer; transition: transform .02s ease, background 0.2s, box-shadow 0.2s; }
+    button:hover { background: var(--brand-2-hover); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    button:active{transform: translateY(1px)}
+    .btn-secondary{background:transparent; color:var(--fg); border:1px solid var(--border)}
+
+    .toolbar{display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin:.5rem 0 0}
+    .toolbar .left, .toolbar .right{display:flex; gap:.5rem; align-items:center}
+
+    img.usbc { max-width: 220px; margin: 0.5rem auto 1rem; display: block; border-radius: 10px; border:1px solid var(--border) }
+    .footer { margin-top: 1rem; font-size: 0.85rem; color: var(--muted); text-align: center; }
+
+    .tip{font-size:.9rem; color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header class="app" aria-live="polite">
+    <span class="icon" data-lucide="play"></span>
+    <h1>Let's Fix Your Screens!</h1>
+    <span class="version">· V3.1</span>
+  </header>
+  <div class="progress" aria-hidden="true"><span id="progressbar"></span></div>
+  <div class="toolbar" aria-label="Navigation toolbar">
+    <div class="left">
+      <button id="backBtn" class="btn-secondary" title="Go back"><span class="icon" data-lucide="arrow-left"></span> Back</button>
+    </div>
+    <div class="right">
+      <button id="restartBtn" class="btn-secondary" title="Restart from the beginning"><span class="icon" data-lucide="rotate-ccw"></span> Restart</button>
+    </div>
+  </div>
+
+  <!-- START -->
+  <div id="step0" class="step active" role="region" aria-labelledby="s0h">
+    <div class="header"><span class="icon" data-lucide="play"></span><h2 id="s0h">Welcome</h2></div>
+    <p>We'll guide you step by step. If we spot something wrong, we’ll show you exactly how to fix it. Ready?</p>
+    <div class="btns">
+      <button onclick="nextStep(1)">Start</button>
+    </div>
+  </div>
+
+    
+  <!-- STEP 1: DOCK OR NOT -->
+  <div id="step1" class="step" role="region" aria-labelledby="s1h">
+    <div class="header"><span class="icon" data-lucide="monitor"></span><h2 id="s1h">Step 1: Docking Station</h2></div>
+    <p>Are you using a docking station (like a Targus dock) to connect your laptop to your monitors?</p>
+    <div class="btns">
+      <button onclick="nextStep(2)">Yes</button>
+      <button onclick="nextStep(100)">No</button>
+    </div>
+  </div>
+
+  <!-- TARGUS DOCK PATH -->
+  <div id="step2" class="step" role="region" aria-labelledby="s2h">
+    <div class="header"><span class="icon" data-lucide="cable"></span><h2 id="s2h">Step 2: Connect the USB‑C Cable</h2></div>
+    <p>Please check that a <strong>single USB‑C cable</strong> is connected between your laptop and the dock.</p>
+    <img class="usbc" src="usb-cimage.png" alt="USB‑C cable connected between laptop and dock" onerror="this.style.display='none'" />
+    <p>Once connected, did that fix the issue?</p>
+    <div class="btns">
+      <button onclick="nextStep(3)">Yes, it’s connected</button>
+      <button onclick="nextStep(3)">No, still not working</button>
+    </div>
+  </div>
+
+  <div id="step3" class="step" role="region" aria-labelledby="s3h">
+    <div class="header"><span class="icon" data-lucide="power"></span><h2 id="s3h">Step 3: Check Dock Power</h2></div>
+    <p>Look underneath the dock. Do you see a <strong>purple light</strong> glowing?</p>
+    <div class="btns">
+      <button onclick="nextStep(32)">Yes, it's on</button>
+      <button onclick="nextStep(31)">No, it's off or blinking</button>
+    </div>
+  </div>
+
+  <div id="step31" class="step" role="region" aria-labelledby="s31h">
+    <div class="header"><span class="icon" data-lucide="toggle-right"></span><h2 id="s31h">Powering On the Dock</h2></div>
+    <p>Press the power button on the bottom of the dock to turn it on.</p>
+    <p>Check again for the purple light. Once it’s lit, can you now see your screens?</p>
+    <div class="btns">
+      <button onclick="nextStep(32)">Yes, now on</button>
+      <button onclick="nextStep(33)">No, still nothing</button>
+    </div>
+  </div>
+
+  <div id="step32" class="step" role="region" aria-labelledby="s32h">
+    <div class="header"><span class="icon" data-lucide="scan-line"></span><h2 id="s32h">Can You See Anything on the Screens?</h2></div>
+    <p>Now we have confirmed the dock is powered and connected, do any monitors show your desktop background (even if no icons or windows are on it)?</p>
+    <div class="btns">
+      <button onclick="nextStep(4)">Yes, there’s a signal</button>
+      <button onclick="nextStep(33)">No, still black</button>
+    </div>
+  </div>
+
+  <div id="step33" class="step" role="region" aria-labelledby="s33h">
+    <div class="header"><span class="icon" data-lucide="replace"></span><h2 id="s33h">Try a Different USB‑C Port</h2></div>
+    <p>Some USB‑C ports don’t support displays. Try unplugging the USB‑C cable and plugging it into a different port on your laptop.</p>
+    <p>After reconnecting, can you see anything on the screens?</p>
+    <div class="btns">
+      <button onclick="nextStep(4)">Yes, that worked</button>
+      <button onclick="nextStep(34)">No, still black</button>
+    </div>
+  </div>
+
+  <div id="step34" class="step" role="region" aria-labelledby="s34h">
+    <div class="header"><span class="icon" data-lucide="lightbulb"></span><h2 id="s34h">Are the Monitors Powered On?</h2></div>
+    <p>Check if each monitor has a power LED illuminated (usually white, green, or amber).</p>
+    <p>If no lights are visible, press the monitor's power button or check its power cable.</p>
+    <p>Once powered on, can you see anything now?</p>
+    <div class="btns">
+      <button onclick="nextStep(4)">Yes, that worked</button>
+      <button onclick="nextStep(7)">No, still no signal</button>
+    </div>
+  </div>
+
+  <!-- COMMON DISPLAY CONFIG -->
+  <div id="step4" class="step" role="region" aria-labelledby="s4h">
+    <div class="header"><span class="icon" data-lucide="layout"></span><h2 id="s4h">Are Displays Working Correctly?</h2></div>
+    <p>Can you see all screens with <strong>different content</strong> and can move your mouse pointer between them as expected?</p>
+    <div class="btns">
+      <button onclick="nextStep(9)">Yes, that works</button>
+      <button onclick="nextStep(5)">No, something’s not right</button>
+    </div>
+  </div>
+
+  <div id="step5" class="step" role="region" aria-labelledby="s5h">
+    <div class="header"><span class="icon" data-lucide="copy"></span><h2 id="s5h">Are Displays Duplicated?</h2></div>
+    <p>Check if your monitors are <strong>duplicated</strong> instead of <strong>extended</strong>.</p>
+    <p>In Display Settings, look under <strong>Multiple Displays</strong>.</p>
+    <div class="btns">
+      <button onclick="nextStep(51)">Yes, they’re duplicated</button>
+      <button onclick="nextStep(6)">No, they’re extended already</button>
+    </div>
+  </div>
+
+  <div id="step51" class="step" role="region" aria-labelledby="s51h">
+    <div class="header"><span class="icon" data-lucide="expand"></span><h2 id="s51h">Change to Extend</h2></div>
+    <p>Change the option under <strong>Multiple Displays</strong> to <strong>Extend these displays</strong> and click Apply.</p>
+    <p>Did that fix the issue?</p>
+    <div class="btns">
+      <button onclick="nextStep(9)">Yes, that solved it!</button>
+      <button onclick="nextStep(6)">No, still needs adjustment</button>
+    </div>
+  </div>
+
+  <div id="step6" class="step" role="region" aria-labelledby="s6h">
+    <div class="header"><span class="icon" data-lucide="panel-left-right"></span><h2 id="s6h">Arrange Screens</h2></div>
+    <p>If your mouse isn’t moving in the expected direction, drag the numbered screens in Display Settings to match your physical layout.</p>
+    <p>Did that resolve the issue?</p>
+    <div class="btns">
+      <button onclick="nextStep(9)">Yes, all good now!</button>
+      <button onclick="nextStep(7)">No, still having problems</button>
+    </div>
+  </div>
+
+  <div id="step9" class="step" role="region" aria-labelledby="s9h">
+    <div class="header"><span class="icon" data-lucide="square-dot"></span><h2 id="s9h">Are Icons on the Correct Screen?</h2></div>
+    <p>If your desktop icons or taskbar are not on the screen you want, you can set your preferred screen as the <strong>Main Display</strong>.</p>
+    <p>Go to <strong>Display Settings</strong> → select the screen you want → tick <strong>Make this my main display</strong>.</p>
+    <p>Has that fixed your issue?</p>
+    <div class="btns">
+      <button onclick="nextStep(8)">Yes, all set</button>
+      <button onclick="nextStep(7)">No, still wrong</button>
+    </div>
+  </div>
+
+  <!-- HDMI / USB HUB PATH (when Step 1 = No) -->
+  <div id="step100" class="step" role="region" aria-labelledby="s100h">
+    <div class="header"><span class="icon" data-lucide="hard-drive"></span><h2 id="s100h">HDMI / USB Hub Setup</h2></div>
+    <p>Are you using a <strong>USB hub/dock</strong> with HDMI outputs?</p>
+    <div class="btns">
+      <button onclick="nextStep(101)">Yes, a USB hub/dock with HDMI</button>
+      <button onclick="nextStep(106)">No, HDMI cable directly from laptop</button>
+    </div>
+  </div>
+
+  <div id="step101" class="step" role="region" aria-labelledby="s101h">
+    <div class="header"><span class="icon" data-lucide="cable"></span><h2 id="s101h">Check HDMI Connections (Hub/Dock)</h2></div>
+    <p>Make sure HDMI cables are firmly connected from the <strong>hub/dock HDMI ports → monitors</strong>.</p>
+    <div class="btns">
+      <button onclick="nextStep(102)">Next</button>
+    </div>
+  </div>
+
+  <div id="step102" class="step" role="region" aria-labelledby="s102h">
+    <div class="header"><span class="icon" data-lucide="lightbulb"></span><h2 id="s102h">Are the Monitors Powered On?</h2></div>
+    <p>Check each monitor’s power LED. If off, press the monitor power button or check its power cable.</p>
+    <p>Once powered, can you see anything?</p>
+    <div class="btns">
+      <button onclick="nextStep(104)">I see something / desktop</button>
+      <button onclick="nextStep(103)">Still nothing</button>
+    </div>
+  </div>
+
+  <div id="step103" class="step" role="region" aria-labelledby="s103h">
+    <div class="header"><span class="icon" data-lucide="replace"></span><h2 id="s103h">Try Other HDMI Ports / Cables</h2></div>
+    <p>Try another HDMI port on the hub or swap the HDMI cable to rule out a faulty port/cable.</p>
+    <p>Now do you see anything?</p>
+    <div class="btns">
+      <button onclick="nextStep(104)">Yes, there’s a signal</button>
+      <button onclick="nextStep(107)">No, still no signal</button>
+    </div>
+  </div>
+
+  <div id="step104" class="step" role="region" aria-labelledby="s104h">
+    <div class="header"><span class="icon" data-lucide="sliders"></span><h2 id="s104h">Display Settings</h2></div>
+    <p>Open <strong>Display Settings</strong> (right-click desktop). If a monitor is missing, click <strong>Detect</strong>.</p>
+    <p>Then we’ll make sure you’re on <strong>Extend</strong> and the screens are in the right order.</p>
+    <div class="btns">
+      <button onclick="nextStep(5)">Continue</button>
+    </div>
+  </div>
+
+  <div id="step106" class="step" role="region" aria-labelledby="s106h">
+    <div class="header"><span class="icon" data-lucide="plug"></span><h2 id="s106h">Check HDMI (Direct from Laptop)</h2></div>
+    <p>Ensure the HDMI cable runs from the <strong>laptop HDMI port → monitor HDMI input</strong> and is firmly seated.</p>
+    <p>Confirm the monitor is powered (power LED on) and on the correct input (HDMI1/HDMI2).</p>
+    <p>Do you see anything now?</p>
+    <div class="btns">
+      <button onclick="nextStep(104)">Yes</button>
+      <button onclick="nextStep(107)">No</button>
+    </div>
+  </div>
+
+  <!-- HANDOFF TO SUPPORT -->
+  <div id="step107" class="step" role="region" aria-labelledby="s107h">
+    <div class="header"><span class="icon" data-lucide="life-buoy"></span><h2 id="s107h">Still Not Working?</h2></div>
+    <p>You've tried all the key steps and it's still not working. It's time to contact the support desk so they can help you further.</p>
+    <p><strong>Email:</strong> <a href="mailto:support@riverford.co.uk">support@riverford.co.uk</a><br>
+    <strong>Phone:</strong> <a href="tel:01803227222">01803 227222</a></p>
+    <div class="btns">
+      <button id="copyTranscriptBtn" class="btn-secondary"><span class="icon" data-lucide="clipboard"></span> Copy what I’ve tried</button>
+      <a id="emailWithBody" class="btn-secondary" href="#"><span class="icon" data-lucide="mail"></span> Email support with details</a>
+      <button onclick="nextStep(0)"><span class="icon" data-lucide="rotate-ccw"></span> Restart Tool</button>
+    </div>
+  </div>
+
+  <!-- GENERIC SUPPORT + SUCCESS (reachable from anywhere) -->
+  <div id="step7" class="step" role="region" aria-labelledby="s7h">
+    <div class="header"><span class="icon" data-lucide="life-buoy"></span><h2 id="s7h">Still Not Working?</h2></div>
+    <p>Contact the support desk so they can help you further.</p>
+    <p><strong>Email:</strong> <a href="mailto:support@riverford.co.uk">support@riverford.co.uk</a><br>
+    <strong>Phone:</strong> <a href="tel:01803227222">01803 227222</a></p>
+    <div class="btns">
+      <button id="copyTranscriptBtn2" class="btn-secondary"><span class="icon" data-lucide="clipboard"></span> Copy what I’ve tried</button>
+      <a id="emailWithBody2" class="btn-secondary" href="#"><span class="icon" data-lucide="mail"></span> Email support with details</a>
+      <button onclick="nextStep(0)"><span class="icon" data-lucide="rotate-ccw"></span> Restart Tool</button>
+    </div>
+  </div>
+
+  <div id="step8" class="step" role="region" aria-labelledby="s8h">
+    <div class="header"><span class="icon" data-lucide="check-circle-2"></span><h2 id="s8h">All Done!</h2></div>
+    <p>Your screens should now be extended, arranged, and set with the correct main display. Great job!</p>
+    <ul>
+      <li>Smooth mouse movement between screens</li>
+      <li>Extra workspace active</li>
+      <li>Icons on the preferred screen</li>
+    </ul>
+    <div class="btns">
+      <button onclick="nextStep(0)">Restart Tool</button>
+    </div>
+    <div class="footer">Display Issue Helper – V3.1 (Lucide Icons)</div>
+  </div>
+
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    const historyStack = [];
+    const transcript = [];
+
+    function setProgress(stepId){
+      const steps = Array.from(document.querySelectorAll('.step'));
+      const total = steps.length;
+      const idx = steps.findIndex(s => s.id === 'step'+stepId);
+      const pct = idx>=0 ? Math.round(((idx+1)/total)*100) : 0;
+      const bar = document.getElementById('progressbar');
+      if(bar){ bar.style.width = pct + '%'; bar.setAttribute('aria-valuenow', String(pct)); }
+    }
+
+    function focusHeading(stepEl){
+      const h = stepEl.querySelector('h2');
+      if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); h.scrollIntoView({behavior:'smooth', block:'start'}); }
+    }
+
+    function showStep(n){
+      document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+      let el = document.getElementById('step' + n);
+      if (!el) { console.warn('Step not found:', n); el = document.getElementById('step0'); n = 0; }
+      el.classList.add('active');
+      if (window.lucide && window.lucide.createIcons) { window.lucide.createIcons(); }
+      focusHeading(el);
+      location.hash = 'step'+n;
+      try{ localStorage.setItem('fixmyscreens:last', String(n)); }catch(e){}
+      setProgress(n);
+      document.getElementById('backBtn').disabled = historyStack.length === 0;
+    }
+
+    function nextStep(n){
+      const current = document.querySelector('.step.active');
+      if(current){ historyStack.push(current.id.replace('step','')); }
+      showStep(n);
+    }
+
+    function back(){
+      const prev = historyStack.pop();
+      if(prev !== undefined){ showStep(prev); }
+    }
+
+    function restart(){ historyStack.length = 0; showStep(0); }
+
+    // Capture button text to transcript for support handoff
+    document.addEventListener('click', (e)=>{
+      const t = e.target;
+      if(t && t.tagName === 'BUTTON'){
+        const step = document.querySelector('.step.active');
+        const stepTitle = step ? step.querySelector('h2')?.textContent?.trim() : '';
+        const action = t.textContent.trim();
+        transcript.push({ step: stepTitle, action });
+      }
+    }, true);
+
+    function humaniseTranscript(){
+      const lines = [];
+      let usingDock = null;
+      let dockCable = null;
+      let dockPower = null;
+      let dockAltPort = null;
+      let monitorsPower = null;
+      let displayConfig = [];
+
+      transcript.forEach(entry => {
+        if(entry.step.includes('Docking Station')){
+          usingDock = entry.action.includes('Yes') ? 'User is using a docking station.' : 'User is not using a docking station.';
+        }
+        if(entry.step.includes('Connect the USB‑C Cable')){
+          dockCable = entry.action.includes('Yes') ? 'USB‑C cable is connected.' : 'USB‑C cable check did not fix the issue.';
+        }
+        if(entry.step.includes('Check Dock Power')){
+          dockPower = entry.action.includes('Yes') ? 'Dock shows purple power light.' : 'Dock power light was off or blinking.';
+        }
+        if(entry.step.includes('Try a Different USB‑C Port')){
+          dockAltPort = entry.action.includes('Yes') ? 'Using alternate USB‑C port fixed the issue.' : 'Tried alternate USB‑C port but still no signal.';
+        }
+        if(entry.step.includes('Are the Monitors Powered On')){
+          monitorsPower = entry.action.includes('Yes') ? 'Monitors powered on and working.' : 'Monitors powered on but still no signal.';
+        }
+        if(entry.step.includes('Duplicated')){
+          displayConfig.push(entry.action.includes('Yes') ? 'Displays were duplicated.' : 'Displays were already extended.');
+        }
+        if(entry.step.includes('Change to Extend')){
+          displayConfig.push(entry.action.includes('Yes') ? 'Changed to Extend fixed the issue.' : 'Changing to Extend did not solve it.');
+        }
+        if(entry.step.includes('Arrange Screens')){
+          displayConfig.push(entry.action.includes('Yes') ? 'Arranging screens fixed the layout.' : 'Arranging screens did not solve it.');
+        }
+        if(entry.step.includes('Icons on the Correct Screen')){
+          displayConfig.push(entry.action.includes('Yes') ? 'User set the correct main display.' : 'Main display still not correct.');
+        }
+      });
+
+      if(usingDock) lines.push(usingDock);
+      if(dockCable) lines.push(dockCable);
+      if(dockPower) lines.push(dockPower);
+      if(dockAltPort) lines.push(dockAltPort);
+      if(monitorsPower) lines.push(monitorsPower);
+      if(displayConfig.length) lines.push('Display configuration: ' + displayConfig.join(' '));
+
+      if(!lines.length) lines.push('No detailed steps captured.');
+      return lines.join('\n');
+    }
+
+    function buildEmailBody(){
+      const when = new Date().toLocaleString();
+      const lines = [
+        `Display Issue Helper – run at ${when}`,
+        '',
+        'Summary of what the user has tried:',
+        humaniseTranscript(),
+        '',
+        'Extra notes:'
+      ];
+      return encodeURIComponent(lines.join('\n'));
+    }
+
+    function wireSupportButtons(){
+      const mail1 = document.getElementById('emailWithBody');
+      const mail2 = document.getElementById('emailWithBody2');
+      const href = () => `mailto:support@riverford.co.uk?subject=${encodeURIComponent('Display Issue – still not working')}&body=${buildEmailBody()}`;
+      if(mail1){ mail1.addEventListener('click', ()=>{ mail1.href = href(); }); }
+      if(mail2){ mail2.addEventListener('click', ()=>{ mail2.href = href(); }); }
+      const copy1 = document.getElementById('copyTranscriptBtn');
+      const copy2 = document.getElementById('copyTranscriptBtn2');
+      const copyFn = async ()=>{
+        const text = decodeURIComponent(buildEmailBody());
+        try{ await navigator.clipboard.writeText(text); alert('Copied details to clipboard.'); }catch(err){ alert('Copy failed. You can paste from the email button instead.'); }
+      };
+      if(copy1) copy1.addEventListener('click', copyFn);
+      if(copy2) copy2.addEventListener('click', copyFn);
+    }
+
+    window.addEventListener('keydown', (e)=>{
+      if(e.altKey && e.key === 'ArrowLeft'){ e.preventDefault(); back(); }
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+      document.getElementById('backBtn').addEventListener('click', back);
+      document.getElementById('restartBtn').addEventListener('click', restart);
+      wireSupportButtons();
+
+      let target = 0;
+      if(location.hash.startsWith('#step')){
+        const n = parseInt(location.hash.replace('#step',''),10); if(!isNaN(n)) target = n;
+      } else {
+        try{ const saved = parseInt(localStorage.getItem('fixmyscreens:last')||'0',10); if(!isNaN(saved)) target = saved; }catch(e){}
+      }
+      showStep(target);
+
+      if (window.lucide && window.lucide.createIcons) { window.lucide.createIcons(); }
+    });
+  </script>
+</body>
+</html>
