@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Display Issue Helper – V1</title>
+  <style>
+    body { font-family: sans-serif; background: #f5f5f5; padding: 2rem; max-width: 800px; margin: auto; }
+    .step { display: none; }
+    .step.active { display: block; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    button { margin: 0.5rem 0.5rem 0 0; padding: 0.5rem 1rem; font-size: 1rem; border: none; border-radius: 6px; background: #4CAF50; color: white; cursor: pointer; }
+    img.usbc { max-width: 200px; margin: 1rem auto; display: block; border-radius: 6px; }
+    .tip { background: #e0f7fa; padding: 0.5rem; margin-top: 1rem; border-left: 4px solid #00796b; }
+    .footer { margin-top: 1rem; font-size: 0.85rem; color: #666; text-align: center; }
+  </style>
+</head>
+<body>
+  <div id="step0" class="step active">
+    <h1>👋 Let's Fix Your Screens!</h1>
+    <p>We'll guide you step by step. If we spot something wrong, we’ll show you exactly how to fix it. Ready?</p>
+    <button onclick="nextStep(1)">🔧 Start</button>
+  </div>
+
+  <div id="step1" class="step">
+    <h2>🧩 Step 1: Docking Station</h2>
+    <p>Are you using a docking station (like a Targus dock) to connect your laptop to your monitors?</p>
+    <button onclick="nextStep(2)">✅ Yes</button>
+    <button onclick="nextStep(100)">❌ No</button>
+  </div>
+
+  <!-- Dock Path -->
+  <div id="step2" class="step">
+    <h2>🔌 Step 2: Connect the USB-C Cable</h2>
+    <p>Please check that a <strong>single USB-C cable</strong> is connected between your laptop and the dock.</p>
+    <!-- Use your provided image; place usb-cimage.png next to the HTML file when exporting -->
+    <img class="usbc" src="usb-cimage.png" alt="USB-C cable connected between laptop and dock" />
+    <p>Once connected, did that fix the issue?</p>
+    <button onclick="nextStep(3)">✅ Yes, it’s connected</button>
+    <button onclick="nextStep(3)">❌ No, still not working</button>
+  </div>
+
+  <div id="step3" class="step">
+    <h2>🔋 Step 3: Check Dock Power</h2>
+    <p>Look underneath the dock. Do you see a <strong>purple light</strong> glowing?</p>
+    <button onclick="nextStep(32)">✅ Yes, it's on</button>
+    <button onclick="nextStep(31)">❌ No, it's off or blinking</button>
+  </div>
+
+  <div id="step31" class="step">
+    <h2>⚡ Powering On the Dock</h2>
+    <p>Press the power button on the bottom of the dock to turn it on.</p>
+    <p>Check again for the purple light. Once it’s lit, can you now see your screens?</p>
+    <button onclick="nextStep(32)">✅ Yes, now on</button>
+    <button onclick="nextStep(33)">❌ No, still nothing</button>
+  </div>
+
+  <div id="step32" class="step">
+    <h2>📺 Can You See Anything on the Screens?</h2>
+    <p>Now we have confirmed the dock is powered and connected, do any monitors show your desktop background (even if no icons or windows are on it)?</p>
+    <button onclick="nextStep(4)">✅ Yes, there’s a signal</button>
+    <button onclick="nextStep(33)">❌ No, still black</button>
+  </div>
+
+  <div id="step33" class="step">
+    <h2>🔁 Try a Different USB-C Port</h2>
+    <p>Some USB-C ports don’t support displays. Try unplugging the USB-C cable and plugging it into a different port on your laptop.</p>
+    <p>After reconnecting, can you see anything on the screens?</p>
+    <button onclick="nextStep(4)">✅ Yes, that worked</button>
+    <button onclick="nextStep(34)">❌ No, still black</button>
+  </div>
+
+  <div id="step34" class="step">
+    <h2>💡 Are the Monitors Powered On?</h2>
+    <p>Check if each monitor has a power LED illuminated (usually white, green, or amber).</p>
+    <p>If no lights are visible, press the monitor's power button or check its power cable.</p>
+    <p>Once powered on, can you see anything now?</p>
+    <button onclick="nextStep(4)">✅ Yes, that worked</button>
+    <button onclick="nextStep(7)">❌ No, still no signal</button>
+  </div>
+
+  <!-- Common display configuration -->
+  <div id="step4" class="step">
+    <h2>🖥️ Are Displays Working Correctly?</h2>
+    <p>Can you see all screens with <strong>different content</strong> and can move your mouse pointer between them as expected?</p>
+    <button onclick="nextStep(9)">✅ Yes, that works</button>
+    <button onclick="nextStep(5)">❌ No, something’s not right</button>
+  </div>
+
+  <div id="step5" class="step">
+    <h2>🔄 Are Displays Duplicated?</h2>
+    <p>Check if your monitors are <strong>duplicated</strong> instead of <strong>extended</strong>.</p>
+    <p>In Display Settings, look under <strong>Multiple Displays</strong>.</p>
+    <button onclick="nextStep(51)">✅ Yes, they’re duplicated</button>
+    <button onclick="nextStep(6)">❌ No, they’re extended already</button>
+  </div>
+
+  <div id="step51" class="step">
+    <h2>🌐 Change to Extend</h2>
+    <p>Change the option under <strong>Multiple Displays</strong> to <strong>Extend these displays</strong> and click Apply.</p>
+    <p>Did that fix the issue?</p>
+    <button onclick="nextStep(9)">✅ Yes, that solved it!</button>
+    <button onclick="nextStep(6)">❌ No, still needs adjustment</button>
+  </div>
+
+  <div id="step6" class="step">
+    <h2>🧭 Arrange Screens</h2>
+    <p>If your mouse isn’t moving in the expected direction, drag the numbered screens in Display Settings to match your physical layout.</p>
+    <p>Did that resolve the issue?</p>
+    <button onclick="nextStep(9)">✅ Yes, all good now!</button>
+    <button onclick="nextStep(7)">❌ No, still having problems</button>
+  </div>
+
+  <div id="step9" class="step">
+    <h2>🖼️ Are Icons on the Correct Screen?</h2>
+    <p>If your desktop icons or taskbar are not on the screen you want, you can set your preferred screen as the <strong>Main Display</strong>.</p>
+    <p>Go to <strong>Display Settings</strong> → select the screen you want → tick <strong>Make this my main display</strong>.</p>
+    <p>Has that fixed your issue?</p>
+    <button onclick="nextStep(8)">✅ Yes, all set</button>
+    <button onclick="nextStep(7)">❌ No, still wrong</button>
+  </div>
+
+  <!-- HDMI / USB Hub Path -->
+  <div id="step100" class="step">
+    <h2>🔌 HDMI / USB Hub Setup</h2>
+    <p>Are you using a <strong>USB hub/dock</strong> with HDMI outputs?</p>
+    <button onclick="nextStep(101)">✅ Yes, a USB hub/dock with HDMI</button>
+    <button onclick="nextStep(106)">❌ No, HDMI cable directly from laptop</button>
+  </div>
+
+  <div id="step101" class="step">
+    <h2>🧷 Check HDMI Connections (Hub/Dock)</h2>
+    <p>Make sure HDMI cables are firmly connected from the <strong>hub/dock HDMI ports → monitors</strong>.</p>
+    <button onclick="nextStep(102)">Next</button>
+  </div>
+
+  <div id="step102" class="step">
+    <h2>💡 Are the Monitors Powered On?</h2>
+    <p>Check each monitor’s power LED. If off, press the monitor power button or check its power cable.</p>
+    <p>Once powered, can you see anything?</p>
+    <button onclick="nextStep(104)">✅ I see something / desktop</button>
+    <button onclick="nextStep(103)">❌ Still nothing</button>
+  </div>
+
+  <div id="step103" class="step">
+    <h2>🔁 Try Other HDMI Ports / Cables</h2>
+    <p>Try another HDMI port on the hub or swap the HDMI cable to rule out a faulty port/cable.</p>
+    <p>Now do you see anything?</p>
+    <button onclick="nextStep(104)">✅ Yes, there’s a signal</button>
+    <button onclick="nextStep(107)">❌ No, still no signal</button>
+  </div>
+
+  <div id="step104" class="step">
+    <h2>🧭 Display Settings</h2>
+    <p>Open <strong>Display Settings</strong> (right-click desktop). If a monitor is missing, click <strong>Detect</strong>.</p>
+    <p>Then we’ll make sure you’re on <strong>Extend</strong> and the screens are in the right order.</p>
+    <button onclick="nextStep(5)">Continue</button>
+  </div>
+
+  <div id="step106" class="step">
+    <h2>🧷 Check HDMI (Direct from Laptop)</h2>
+    <p>Ensure the HDMI cable runs from the <strong>laptop HDMI port → monitor HDMI input</strong> and is firmly seated.</p>
+    <p>Confirm the monitor is powered (power LED on) and on the correct input (HDMI1/HDMI2).</p>
+    <p>Do you see anything now?</p>
+    <button onclick="nextStep(104)">✅ Yes</button>
+    <button onclick="nextStep(107)">❌ No</button>
+  </div>
+
+  <!-- Support & Success -->
+  <div id="step7" class="step">
+    <h2>🚨 Still Not Working?</h2>
+    <p>Contact the support desk so they can help you further.</p>
+    <p><strong>📧 Email:</strong> <a href="mailto:support@riverford.co.uk">support@riverford.co.uk</a><br>
+    <strong>📞 Phone:</strong> <a href="tel:01803227222">01803 227222</a></p>
+    <p>Let them know you've already tried this tool and what you've seen so far.</p>
+    <button onclick="nextStep(0)">🔁 Restart Tool</button>
+  </div>
+
+  <div id="step8" class="step">
+    <h2>🎉 All Done!</h2>
+    <p>Your screens should now be extended, arranged, and set with the correct main display. Great job!</p>
+    <ul>
+      <li>🖱️ Smooth mouse movement between screens</li>
+      <li>📊 Extra workspace active</li>
+      <li>🖼️ Icons on the preferred screen</li>
+    </ul>
+    <button onclick="nextStep(0)">Restart Tool</button>
+    <div class="footer">Display Issue Helper – V1</div>
+  </div>
+
+  <script>
+    function nextStep(n) {
+      document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+      var el = document.getElementById('step' + n);
+      if (el) { el.classList.add('active'); }
+    }
+  </script>
+</body>
+</html>
